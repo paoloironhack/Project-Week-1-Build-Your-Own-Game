@@ -1,6 +1,7 @@
 <img src="https://bit.ly/2VnXWr2" alt="Ironhack Logo" width="100"/>
 
-Memory game
+Memory Game
+
 Sreelatha Chunduri
 
 dptams2020, Amsterdam, Jan 22, 2020
