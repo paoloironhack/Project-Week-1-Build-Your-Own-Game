@@ -1,9 +1,9 @@
 <img src="https://bit.ly/2VnXWr2" alt="Ironhack Logo" width="100"/>
 
-# Title of Your Project
-*[Your Name]*
+Memory game
+Sreelatha Chunduri
 
-*[Your Cohort, Campus & Date]*
+dptams2020, Amsterdam, Jan 22, 2020
 
 ## Content
 - [Project Description](#project-description)
@@ -13,7 +13,9 @@
 - [Links](#links)
 
 ## Project Description
-Write a short description of your project. Write 1-2 sentences about the game you chose to build and why.
+In the one player Memory game, several icons are covered up by white boxes. There are two of each icon. The player can click on two boxes to see what icon is behind them. If the icons match, then those boxes remain uncovered. The player wins when all the boxes on the board are uncovered. 
+
+Nested for Loops
 
 ## Rules
 Briefly describe the rules of the game.
