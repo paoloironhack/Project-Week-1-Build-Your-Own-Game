@@ -22,7 +22,7 @@ display_surface = pygame.display.set_mode((X, Y ))
 pygame.display.set_caption('Image') 
   
 # create a surface object, image is drawn on it. 
-image = pygame.image.load(r'C:\Users\Sreelatha\Desktop\Game\images\f1.jpg') 
+image = pygame.image.load(r'C:\Users\Sreelatha\Desktop\ironHack\Game\Project-Week-1-Build-Your-Own-Game\your-project\images\f1.jpg') 
 
 
 # infinite loop 

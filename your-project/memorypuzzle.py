@@ -5,6 +5,7 @@
 
 import random, pygame, sys, os
 from pygame.locals import *
+from pathlib import Path
 
 FPS = 30 # frames per second, the general speed of the program
 WINDOWWIDTH = 800 # size of window's width in pixels
@@ -17,34 +18,38 @@ BOARDHEIGHT = 6 # number of rows of icons
 assert (BOARDWIDTH * BOARDHEIGHT) % 2 == 0, 'Board needs to have an even number of boxes for pairs of matches.'
 XMARGIN = int((WINDOWWIDTH - (BOARDWIDTH * (BOXSIZE + GAPSIZE))) / 2)
 YMARGIN = int((WINDOWHEIGHT - (BOARDHEIGHT * (BOXSIZE + GAPSIZE))) / 2)
-
+IMAGESPATH = r'C:/Users/Sreelatha/Desktop/ironHack/Game/Project-Week-1-Build-Your-Own-Game/your-project/images/'
 #            R    G    B
-GRAY     = (100, 100, 100)
+GRAY     = (100, 100, 100
 NAVYBLUE = ( 60,  60, 100)
 WHITE    = (255, 255, 255)
-RED      = (255,   0,   0)
-GREEN    = (  0, 255,   0)
+# RED      = (255,   0,   0)
+# GREEN    = (  0, 255,   0)
 BLUE     = (  0,   0, 255)
-YELLOW   = (255, 255,   0)
-ORANGE   = (255, 128,   0)
-PURPLE   = (255,   0, 255)
-CYAN     = (  0, 255, 255)
+# YELLOW   = (255, 255,   0)
+# ORANGE   = (255, 128,   0)
+# PURPLE   = (255,   0, 255)
+# CYAN     = (  0, 255, 255)
 
 BGCOLOR = NAVYBLUE
 LIGHTBGCOLOR = GRAY
 BOXCOLOR = WHITE
 HIGHLIGHTCOLOR = BLUE
 
-DONUT = 'donut'
-SQUARE = 'square'
-DIAMOND = 'diamond'
-LINES = 'lines'
-OVAL = 'oval'
-
-ALLIMAGES = os.listdir("./images") 
-ALLCOLORS = (RED, GREEN, BLUE, YELLOW, ORANGE, PURPLE, CYAN)
-ALLSHAPES = (DONUT, SQUARE, DIAMOND, LINES, OVAL)
-assert len(ALLCOLORS) * len(ALLSHAPES) * 2 >= BOARDWIDTH * BOARDHEIGHT, "Board is too big for the number of shapes/colors defined."
+# DONUT = 'donut'
+# SQUARE = 'square'
+# DIAMOND = 'diamond'
+# LINES = 'lines'
+# OVAL = 'oval'
+ALLIMAGES=[]
+imageFileNameList = os.listdir("./images")
+data_folder = Path(IMAGESPATH)
+for filename in imageFileNameList:
+    full_path = data_folder / filename
+    ALLIMAGES.append(full_path)
+# ALLCOLORS = (RED, GREEN, BLUE, YELLOW, ORANGE, PURPLE, CYAN)
+# ALLSHAPES = (DONUT, SQUARE, DIAMOND, LINES, OVAL)
+assert len(ALLIMAGES) * 2 >= BOARDWIDTH * BOARDHEIGHT, "Board is too small for the number of images defined."
 
 def main():
     global FPSCLOCK, DISPLAYSURF
@@ -58,6 +63,8 @@ def main():
 
     mainBoard = getRandomizedBoard()
     revealedBoxes = generateRevealedBoxesData(False)
+    print(revealedBoxes)
+
 
     firstSelection = None # stores the (x, y) of the first box clicked.
 
@@ -92,10 +99,10 @@ def main():
                     firstSelection = (boxx, boxy)
                 else: # the current box was the second box clicked
                     # Check if there is a match between the two icons.
-                    icon1shape, icon1color = getShapeAndColor(mainBoard, firstSelection[0], firstSelection[1])
-                    icon2shape, icon2color = getShapeAndColor(mainBoard, boxx, boxy)
+                    icon1image = getImage(mainBoard, firstSelection[0], firstSelection[1])
+                    icon2image = getImage(mainBoard, boxx, boxy)
 
-                    if icon1shape != icon2shape or icon1color != icon2color:
+                    if icon1image != icon2image:
                         # Icons don't match. Re-cover up both selections.
                         pygame.time.wait(1000) # 1000 milliseconds = 1 sec
                         coverBoxesAnimation(mainBoard, [(firstSelection[0], firstSelection[1]), (boxx, boxy)])
@@ -133,6 +140,7 @@ def generateRevealedBoxesData(val):
 def getRandomizedBoard():
     # Get a list of every possible shape in every possible color.
     icons = []
+    print(ALLIMAGES)
     for image in ALLIMAGES:
         icons.append(image)
 
@@ -178,31 +186,23 @@ def getBoxAtPixel(x, y):
     return (None, None)
 
 
-def drawIcon(shape, color, boxx, boxy):
+def drawIcon(image, boxx, boxy):
     quarter = int(BOXSIZE * 0.25) # syntactic sugar
     half =    int(BOXSIZE * 0.5)  # syntactic sugar
+    print(image)
 
+    imageObj = pygame.image.load(image)
     left, top = leftTopCoordsOfBox(boxx, boxy) # get pixel coords from board coords
     # Draw the shapes
-    if shape == DONUT:
-        pygame.draw.circle(DISPLAYSURF, color, (left + half, top + half), half - 5)
-        pygame.draw.circle(DISPLAYSURF, BGCOLOR, (left + half, top + half), quarter - 5)
-    elif shape == SQUARE:
-        pygame.draw.rect(DISPLAYSURF, color, (left + quarter, top + quarter, BOXSIZE - half, BOXSIZE - half))
-    elif shape == DIAMOND:
-        pygame.draw.polygon(DISPLAYSURF, color, ((left + half, top), (left + BOXSIZE - 1, top + half), (left + half, top + BOXSIZE - 1), (left, top + half)))
-    elif shape == LINES:
-        for i in range(0, BOXSIZE, 4):
-            pygame.draw.line(DISPLAYSURF, color, (left, top + i), (left + i, top))
-            pygame.draw.line(DISPLAYSURF, color, (left + i, top + BOXSIZE - 1), (left + BOXSIZE - 1, top + i))
-    elif shape == OVAL:
-        pygame.draw.ellipse(DISPLAYSURF, color, (left, top + quarter, BOXSIZE, half))
+    DISPLAYSURF.blit(imageObj,(left,top)) 
+  
 
+  
 
-def getShapeAndColor(board, boxx, boxy):
+def getImage(board, boxx, boxy):
     # shape value for x, y spot is stored in board[x][y][0]
     # color value for x, y spot is stored in board[x][y][1]
-    return board[boxx][boxy][0], board[boxx][boxy][1]
+    return board[boxx][boxy][0]
 
 
 def drawBoxCovers(board, boxes, coverage):
@@ -211,8 +211,8 @@ def drawBoxCovers(board, boxes, coverage):
     for box in boxes:
         left, top = leftTopCoordsOfBox(box[0], box[1])
         pygame.draw.rect(DISPLAYSURF, BGCOLOR, (left, top, BOXSIZE, BOXSIZE))
-        shape, color = getShapeAndColor(board, box[0], box[1])
-        drawIcon(shape, color, box[0], box[1])
+        image = getImage(board, box[0], box[1])
+        drawIcon(image, box[0], box[1])
         if coverage > 0: # only draw the cover if there is an coverage
             pygame.draw.rect(DISPLAYSURF, BOXCOLOR, (left, top, coverage, BOXSIZE))
     pygame.display.update()
@@ -241,8 +241,8 @@ def drawBoard(board, revealed):
                 pygame.draw.rect(DISPLAYSURF, BOXCOLOR, (left, top, BOXSIZE, BOXSIZE))
             else:
                 # Draw the (revealed) icon.
-                shape, color = getShapeAndColor(board, boxx, boxy)
-                drawIcon(shape, color, boxx, boxy)
+                image = getImage(board, boxx, boxy)
+                drawIcon(image, boxx, boxy)
 
 
 def drawHighlightBox(boxx, boxy):
@@ -251,14 +251,14 @@ def drawHighlightBox(boxx, boxy):
 
 
 def startGameAnimation(board):
-    # Randomly reveal the boxes 8 at a time.
+    # Randomly reveal the boxes 6 at a time.
     coveredBoxes = generateRevealedBoxesData(False)
     boxes = []
     for x in range(BOARDWIDTH):
         for y in range(BOARDHEIGHT):
             boxes.append( (x, y) )
     random.shuffle(boxes)
-    boxGroups = splitIntoGroupsOf(8, boxes)
+    boxGroups = splitIntoGroupsOf(6, boxes)
 
     drawBoard(board, coveredBoxes)
     for boxGroup in boxGroups:
