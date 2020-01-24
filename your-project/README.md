@@ -33,7 +33,6 @@ The workflow is shown in the presentation (slide deck).
 ## Organization
 We used kanban board (trello) to track design tasks, coding tasks, set up tasks and testing tasks.
 
-What does your repository look like? Explain your folder and file structure.
 A repository was created where all the game information was stored. It has an images folder where all  the images are stored.There is a Readme file where the game description and rules are mentioned.
 
 ## Links
