@@ -289,6 +289,6 @@ def hasWon(revealedBoxes):
             return False # return False if any boxes are covered.
     return True
 
-
+# Used to trigger the code to start from main
 if __name__ == '__main__':
     main()
