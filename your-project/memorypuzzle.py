@@ -2,54 +2,45 @@
 # By Al Sweigart al@inventwithpython.com
 # http://inventwithpython.com/pygame
 # Released under a "Simplified BSD" license
+# Modified by Sreelatha Chunduri
 
 import random, pygame, sys, os
 from pygame.locals import *
 from pathlib import Path
 
-FPS = 30 # frames per second, the general speed of the program
+# In python declaring constants is always done in CAPS. That is the reasons for the All Caps in the Constants below.
+FPS = 50 # frames per second, the general speed of the program
 WINDOWWIDTH = 800 # size of window's width in pixels
 WINDOWHEIGHT = 600 # size of windows' height in pixels
-REVEALSPEED = 8 # speed boxes' sliding reveals and covers
+REVEALSPEED = 3 # speed boxes' sliding reveals and covers
 BOXSIZE = 80 # size of box height & width in pixels
 GAPSIZE = 10 # size of gap between boxes in pixels
 BOARDWIDTH = 6 # number of columns of icons
 BOARDHEIGHT = 6 # number of rows of icons
-assert (BOARDWIDTH * BOARDHEIGHT) % 2 == 0, 'Board needs to have an even number of boxes for pairs of matches.'
+# asset makes that the programmer doesnt make a mistake and provides an error. In this case if you more than 6 columns of icons it shows an error.
+assert (BOARDWIDTH * BOARDHEIGHT) % 2 == 0, 'Board needs to have an even number of boxes for pairs of matches.' 
+
 XMARGIN = int((WINDOWWIDTH - (BOARDWIDTH * (BOXSIZE + GAPSIZE))) / 2)
 YMARGIN = int((WINDOWHEIGHT - (BOARDHEIGHT * (BOXSIZE + GAPSIZE))) / 2)
+# The prefix r is used before the image path so that we dont have to use the escape charater for backslash \. 
+# This is the path where all the images are stored.
 IMAGESPATH = r'C:\Users\Sreelatha\Desktop\ironHack\Game\Project-Week-1-Build-Your-Own-Game\your-project\images' 
+
+
+#Colors used for the different parts of the graphical interface.
+
 #            R    G    B
 GRAY     = (100, 100, 100)
 NAVYBLUE = (60, 60, 100)
 WHITE    = (255, 255, 255)
-# RED      = (255,   0,   0)
-# GREEN    = (  0, 255,   0)
 BLUE     = (  0,   0, 255)
-# YELLOW   = (255, 255,   0)
-# ORANGE   = (255, 128,   0)
-# PURPLE   = (255,   0, 255)
-# CYAN     = (  0, 255, 255)
+
 
 BGCOLOR = NAVYBLUE
 LIGHTBGCOLOR = GRAY
 BOXCOLOR = WHITE
 HIGHLIGHTCOLOR = BLUE
 
-# DONUT = 'donut'
-# SQUARE = 'square'
-# DIAMOND = 'diamond'
-# LINES = 'lines'
-# OVAL = 'oval'
-ALLIMAGES=[]
-imageFileNameList = os.listdir("./images")
-data_folder = Path(IMAGESPATH)
-for filename in imageFileNameList:
-    full_path = data_folder / filename
-    ALLIMAGES.append(str(full_path))
-# ALLCOLORS = (RED, GREEN, BLUE, YELLOW, ORANGE, PURPLE, CYAN)
-# ALLSHAPES = (DONUT, SQUARE, DIAMOND, LINES, OVAL)
-assert len(ALLIMAGES) * 2 >= BOARDWIDTH * BOARDHEIGHT, "Board is too small for the number of images defined."
 
 def main():
     global FPSCLOCK, DISPLAYSURF
@@ -59,9 +50,24 @@ def main():
 
     mousex = 0 # used to store x coordinate of mouse event
     mousey = 0 # used to store y coordinate of mouse event
-    pygame.display.set_caption('Memory Game')
+    pygame.display.set_caption("Sreelatha's Memory Game")
 
-    mainBoard = getRandomizedBoard()
+    # Create a list of all image paths
+    allimages=[]
+    imageFileNameList = os.listdir("./images")
+    # Path is from pathlib library and is used to manage directory paths independent of operating systems. 
+    # Here it is used to get the full path of the image folder.
+    data_folder = Path(IMAGESPATH)
+    for filename in imageFileNameList:
+        full_path = data_folder / filename
+        allimages.append(str(full_path))
+
+    # assert is provided to check if there are 36 images (pair of 18). If images are more than 18 then the it shows the message "Board is too small for the number of images defined."
+    assert len(allimages) * 2 >= BOARDWIDTH * BOARDHEIGHT, "Board is too small for the number of images defined."
+
+
+    # Creating board data structure
+    mainBoard = getRandomizedBoard(allimages)
 
     revealedBoxes = generateRevealedBoxesData(False)
 
@@ -71,12 +77,12 @@ def main():
     DISPLAYSURF.fill(BGCOLOR)
     startGameAnimation(mainBoard)
 
+    # while True means infinite loop
     while True: # main game loop
         mouseClicked = False
 
         DISPLAYSURF.fill(BGCOLOR) # drawing the window
         drawBoard(mainBoard, revealedBoxes)
-
         for event in pygame.event.get(): # event handling loop
             if event.type == QUIT or (event.type == KEYUP and event.key == K_ESCAPE):
                 pygame.quit()
@@ -113,7 +119,7 @@ def main():
                         pygame.time.wait(2000)
 
                         # Reset the board
-                        mainBoard = getRandomizedBoard()
+                        mainBoard = getRandomizedBoard(allimages)
                         revealedBoxes = generateRevealedBoxesData(False)
 
                         # Show the fully unrevealed board for a second.
@@ -129,7 +135,7 @@ def main():
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
-
+# Data structure to keep track of the icons that have been revealed.
 def generateRevealedBoxesData(val):
     revealedBoxes = []
     for i in range(BOARDWIDTH):
@@ -137,16 +143,17 @@ def generateRevealedBoxesData(val):
     return revealedBoxes
 
 
-def getRandomizedBoard():
-    # Get a list of every possible shape in every possible color.
+def getRandomizedBoard(allimages):
     icons = []
    
-    for image in ALLIMAGES:
+    for image in allimages:
         icons.append(image)
 
     random.shuffle(icons) # randomize the order of the icons list
     numIconsUsed = int(BOARDWIDTH * BOARDHEIGHT / 2) # calculate how many icons are needed
     icons = icons[:numIconsUsed] * 2 # make two of each
+    # The shuffle() method takes a sequence (list, string, or tuple) and reorganize the order of the items. 
+    # Note: This method changes the original list/tuple/string, it does not return a new list/tuple/string.
     random.shuffle(icons)
 
     # Create the board data structure, with randomly placed icons.
@@ -159,7 +166,7 @@ def getRandomizedBoard():
         board.append(column)
     return board
 
-
+# Used to make random 6x6 list of coordinates where eventually images will be linked to the coordinates.
 def splitIntoGroupsOf(groupSize, theList):
     # splits a list into a list of lists, where the inner lists have at
     # most groupSize number of items.
@@ -187,9 +194,6 @@ def getBoxAtPixel(x, y):
 
 
 def drawIcon(image, boxx, boxy):
-    quarter = int(BOXSIZE * 0.25) # syntactic sugar
-    half =    int(BOXSIZE * 0.5)  # syntactic sugar
-
     imageObj = pygame.image.load(image)
     left, top = leftTopCoordsOfBox(boxx, boxy) # get pixel coords from board coords
     # Draw the shapes
@@ -197,13 +201,8 @@ def drawIcon(image, boxx, boxy):
   
 
   
-
+# Get the image at coordinates boxx, boxy
 def getImage(board, boxx, boxy):
-
-    print(boxx)
-    print(boxy)
-
-    print(board[boxx][boxy])
     return board[boxx][boxy]
 
 
@@ -267,7 +266,8 @@ def startGameAnimation(board):
         revealBoxesAnimation(board, boxGroup)
         coverBoxesAnimation(board, boxGroup)
 
-
+# when you win you get animation of 2 colors (LIGHTBGCOLOR and BGCOLOR) 13 times swapping each color for the other. 
+# Then it shows all the inages as relealed.
 def gameWonAnimation(board):
     # flash the background color when the player has won
     coveredBoxes = generateRevealedBoxesData(True)
