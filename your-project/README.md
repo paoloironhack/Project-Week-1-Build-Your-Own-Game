@@ -39,5 +39,5 @@ A repository was created where all the game information was stored. It has an im
 Links to the memory game repository.
 
 [Repository](https://github.com/sreechun/Project-Week-1-Build-Your-Own-Game)  
-[Slides](https://slides.com/)  
+[Slides](https://github.com/sreechun/Project-Week-1-Build-Your-Own-Game/blob/master/your-project/Memory%20Game_Data%20Analytics%20Project1_Sreelatha.odp?raw=true)  
 [Trello](https://trello.com/b/PyAkADgd)  
