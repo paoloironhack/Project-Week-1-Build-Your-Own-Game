@@ -18,8 +18,8 @@ In the one player Memory game, several images are covered by white boxes. There 
 
 
 ## Rules
-1. Quicky blink over on all boxes to make sure that the player registers the images and their locations in their mind.
-2. After the blinking of all boxes stop, the player can start the game by hovering over the covered white boxes.
+1. Reveal Animation on all boxes to make sure that the player registers the images and their locations in their mind.
+2. After the animation of all boxes stop, the player can start the game by hovering over the covered white boxes.
 3. The player can click on any one of the white boxes and uncover the image.
 4. Once the player sees the image, remember and try finding the same image in another box.
 5. When the match is identified, the 2 similar images remain uncovered.
