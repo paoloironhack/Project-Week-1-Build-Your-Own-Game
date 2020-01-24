@@ -18,10 +18,10 @@ BOARDHEIGHT = 6 # number of rows of icons
 assert (BOARDWIDTH * BOARDHEIGHT) % 2 == 0, 'Board needs to have an even number of boxes for pairs of matches.'
 XMARGIN = int((WINDOWWIDTH - (BOARDWIDTH * (BOXSIZE + GAPSIZE))) / 2)
 YMARGIN = int((WINDOWHEIGHT - (BOARDHEIGHT * (BOXSIZE + GAPSIZE))) / 2)
-IMAGESPATH = r'C:/Users/Sreelatha/Desktop/ironHack/Game/Project-Week-1-Build-Your-Own-Game/your-project/images/'
+IMAGESPATH = r'C:\Users\Sreelatha\Desktop\ironHack\Game\Project-Week-1-Build-Your-Own-Game\your-project\images' 
 #            R    G    B
-GRAY     = (100, 100, 100
-NAVYBLUE = ( 60,  60, 100)
+GRAY     = (100, 100, 100)
+NAVYBLUE = (60, 60, 100)
 WHITE    = (255, 255, 255)
 # RED      = (255,   0,   0)
 # GREEN    = (  0, 255,   0)
@@ -46,7 +46,7 @@ imageFileNameList = os.listdir("./images")
 data_folder = Path(IMAGESPATH)
 for filename in imageFileNameList:
     full_path = data_folder / filename
-    ALLIMAGES.append(full_path)
+    ALLIMAGES.append(str(full_path))
 # ALLCOLORS = (RED, GREEN, BLUE, YELLOW, ORANGE, PURPLE, CYAN)
 # ALLSHAPES = (DONUT, SQUARE, DIAMOND, LINES, OVAL)
 assert len(ALLIMAGES) * 2 >= BOARDWIDTH * BOARDHEIGHT, "Board is too small for the number of images defined."
@@ -62,8 +62,8 @@ def main():
     pygame.display.set_caption('Memory Game')
 
     mainBoard = getRandomizedBoard()
+
     revealedBoxes = generateRevealedBoxesData(False)
-    print(revealedBoxes)
 
 
     firstSelection = None # stores the (x, y) of the first box clicked.
@@ -140,7 +140,7 @@ def generateRevealedBoxesData(val):
 def getRandomizedBoard():
     # Get a list of every possible shape in every possible color.
     icons = []
-    print(ALLIMAGES)
+   
     for image in ALLIMAGES:
         icons.append(image)
 
@@ -189,7 +189,6 @@ def getBoxAtPixel(x, y):
 def drawIcon(image, boxx, boxy):
     quarter = int(BOXSIZE * 0.25) # syntactic sugar
     half =    int(BOXSIZE * 0.5)  # syntactic sugar
-    print(image)
 
     imageObj = pygame.image.load(image)
     left, top = leftTopCoordsOfBox(boxx, boxy) # get pixel coords from board coords
@@ -200,9 +199,12 @@ def drawIcon(image, boxx, boxy):
   
 
 def getImage(board, boxx, boxy):
-    # shape value for x, y spot is stored in board[x][y][0]
-    # color value for x, y spot is stored in board[x][y][1]
-    return board[boxx][boxy][0]
+
+    print(boxx)
+    print(boxy)
+
+    print(board[boxx][boxy])
+    return board[boxx][boxy]
 
 
 def drawBoxCovers(board, boxes, coverage):

@@ -22,7 +22,7 @@ display_surface = pygame.display.set_mode((X, Y ))
 pygame.display.set_caption('Image') 
   
 # create a surface object, image is drawn on it. 
-image = pygame.image.load(r'C:\Users\Sreelatha\Desktop\ironHack\Game\Project-Week-1-Build-Your-Own-Game\your-project\images\f1.jpg') 
+image = pygame.image.load(r'C:\\Users\\Sreelatha\\Desktop\\ironHack\\Game\\Project-Week-1-Build-Your-Own-Game\\your-project\\images\\f1.jpg') 
 
 
 # infinite loop 
@@ -36,8 +36,7 @@ while True :
     # to the display surface object at 
     # (0, 0) coordinate. 
     display_surface.blit(image, (0, 0)) 
-    display_surface.blit(image, (0, 1)) 
-
+    
     # iterate over the list of Event objects 
     # that was returned by pygame.event.get() method. 
     for event in pygame.event.get() : 
